@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cassandra
+spec:
+  serviceName: cassandra
+  replicas: 3 
+  selector:
+    matchLabels:
+      app: cassandra
+  template:
+    metadata:
+      labels:
+        app: cassandra
+    spec:
+      containers:
+      - name: cassandra
+        image: cassandra:latest 
+        ports:
+        - containerPort: 9042 
+        - containerPort: 7000 
+        - containerPort: 7001 
+        - containerPort: 7199 
+        volumeMounts:
+        - name: pv-storage
+          mountPath: /output
+      volumes: 
+        - name: pv-storage 
+          persistentVolumeClaim: 
+            claimName: host-pvc
